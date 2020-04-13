@@ -1,12 +1,9 @@
 from os.path import isfile
 from urllib.parse import unquote
-from googletrans import Translator
+from translate import Translator
 from time import sleep
 class PostCloning:
     def __init__(self, api_session=None):
-        self.options = {
-            "posting_delay": 500,
-        }
         self.__session = api_session
         self.__cloned_postid = None
         self.__cloned_postid_file = None
@@ -28,20 +25,18 @@ class PostCloning:
         for idx, post in enumerate(lastPost):
             if (self.__formatingPostId(post["id"]) not in self.__cloned_postid):
                 newActivity = True
-                if (idx >= 1 and idx < len(lastPost)-1):
-                    sleep(self.options["posting_delay"])
             else:
                 newActivity = False
             yield idx, newActivity, post
     def __make_post_data(self, post, to_lang):
-        translator = Translator()
+        translator= Translator(to_lang=to_lang)
         upimg = False
         upvideo = False
         postType = None
         data = {}
         pictureLink = ((post.get("picture","")).encode("utf8")).decode("utf-8")
         if ("message" in post):
-            data["message"] = translator.translate(post["message"], dest=to_lang).text
+            data["message"] = translator.translate(post["message"])
             postType = "Text"
         if ((post.get("link", "")).startswith("https://www.facebook.com")):
             if ("profil" in post.get("story", "")): # change photo profile

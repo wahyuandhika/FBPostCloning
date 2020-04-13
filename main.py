@@ -13,7 +13,7 @@ pc = PostCloning(api_session=sess)
 while True:
     pc.open_target("1xxxx5173419917")
     newAct_printed = False
-    for c, status, post in pc.check_activity(limit=5):
+    for _, status, post in pc.check_activity(limit=5):
         if (status):
             if (newAct_printed==False):
                 print("Found new activity!")
@@ -21,4 +21,5 @@ while True:
             realPostId, clonedPostId, postType = pc.clone_post(post, to_lang="ms")
             if (clonedPostId != False):
                 print(f"[NEW]: {realPostId} -> {clonedPostId} [{postType}]")
+                sleep(500)
     sleep(900) #15m
