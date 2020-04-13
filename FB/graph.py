@@ -30,10 +30,11 @@ class API():
         if (self.__access_token == None):
             print(f"Dismissed: missing access_token")
             exit()
-        feed = json.loads(requests.get(f"https://graph.facebook.com/{target_id}?fields=feed&access_token={self.__access_token}", timeout=100).text)["feed"]
+        feed = json.loads(requests.get(f"https://graph.facebook.com/{target_id}?fields=feed&access_token={self.__access_token}", timeout=100).text)
         if ("error" in feed):
             print(feed["error"]["message"])
             exit()
+        feed = feed["feed"]
         lastPost = []
         targetName = (self.get_user_data(target_id)).get("name", "")
         for post in feed["data"]:
